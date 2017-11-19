@@ -1,5 +1,11 @@
 package io.github.mmyers.prime;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,6 +16,8 @@ import java.util.Scanner;
  * @version  $Revision$, $Date$
  */
 public class PrimeNumberSearch {
+    final Scanner consoleReader = new Scanner(System.in);
+
     /**
      * Creates a new PrimeNumberSearch object.
      */
@@ -51,29 +59,6 @@ public class PrimeNumberSearch {
     }
 
     /**
-     * Returns valid Integer as user input from the console.
-     *
-     * @return  user number value.
-     */
-    public Integer getUserNumber() {
-        final Scanner reader = new Scanner(System.in);
-
-        Integer userInteger = reader.nextInt();
-
-        while (validateNumber(userInteger).equals(false)) {
-            System.out.println(userInteger + " is not a positive whole number.");
-            System.out.println("Please enter a positive whole number: ");
-            userInteger = reader.nextInt();
-
-        }
-
-        reader.close();
-
-        return userInteger;
-
-    }
-
-    /**
      * Returns the valid range value.
      *
      * @return  the valid range value.
@@ -93,7 +78,7 @@ public class PrimeNumberSearch {
     }
 
     /**
-     * Returns the number prime value.
+     * Determines if a number is a prime number.
      *
      * @param   number
      *
@@ -145,12 +130,14 @@ public class PrimeNumberSearch {
 
             }
 
+            writeResultsFile(primeNumbers);
+
         }
 
     }
 
     /**
-     * DOCUMENT ME!
+     * Requests numbers for the range.
      *
      * @return  ArrayList
      */
@@ -158,11 +145,41 @@ public class PrimeNumberSearch {
         final ArrayList<Integer> userNumbers = new ArrayList<Integer>();
 
         System.out.println("Enter the minimum number: ");
-        userNumbers.add(0, getUserNumber());
+        userNumbers.add(0, requestUserInteger());
         System.out.println("Enter the maximum number: ");
-        userNumbers.add(1, getUserNumber());
+        userNumbers.add(1, requestUserInteger());
 
         return userNumbers;
+
+    }
+
+    /**
+     * Returns valid Integer as user input from the console.
+     *
+     * @return  user number value.
+     */
+    public Integer requestUserInteger() {
+        String userInput;
+        Integer userInteger = -1;
+
+        while (userInteger <= -1) {
+            userInput = consoleReader.next();
+
+            try {
+                userInteger = Integer.parseInt(userInput);
+
+            } catch (NumberFormatException ex) {
+            }
+
+            if (userInteger <= -1) {
+                System.out.println("That value is not a positive whole number.");
+                System.out.println("Please enter a valid number: ");
+
+            }
+
+        }
+
+        return userInteger;
 
     }
 
@@ -177,6 +194,7 @@ public class PrimeNumberSearch {
         numberRange = getValidRange();
         primeNumbers = findPrimeNumbers(numberRange.get(0), numberRange.get(1));
         printNumbers(primeNumbers, numberRange);
+        consoleReader.close();
 
     }
 
@@ -191,23 +209,6 @@ public class PrimeNumberSearch {
     }
 
     /**
-     * Validates that number is valid for the search by determining that it is a whole positive number.
-     *
-     * @param   numberToValidate
-     *
-     * @return  Integer
-     */
-    public Boolean validateNumber(final Integer numberToValidate) {
-        if (numberToValidate > 0) {
-            return true;
-
-        }
-
-        return false;
-
-    }
-
-    /**
      * Determines if the range is valid for a prime number search.
      *
      * @param   numberRange
@@ -216,6 +217,30 @@ public class PrimeNumberSearch {
      */
     public Boolean validateRange(final ArrayList<Integer> numberRange) {
         return numberRange.get(0) < numberRange.get(1);
+
+    }
+
+    /**
+     * Writes a results file of all the prime numbers found in the range.
+     *
+     * @param  results
+     */
+    public void writeResultsFile(final ArrayList<Integer> results) {
+        final String file = "PrimeNumbers.txt";
+        System.out.println("Writing results to: " + file);
+
+        try(final BufferedWriter writer = Files.newBufferedWriter(Paths.get(file))) {
+            for (final Integer number : results) {
+                writer.write(number.toString() + "\n");
+
+            }
+
+        } catch (IOException ioException) {
+            System.out.println("There was an issue writing the results file: ");
+            System.out.println(ioException);
+
+        }
+
 
     }
 
