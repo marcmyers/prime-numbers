@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 /**
@@ -16,7 +15,7 @@ import java.util.Scanner;
  * @version  $Revision$, $Date$
  */
 public class PrimeNumberSearch {
-    private final Scanner consoleReader = new Scanner(System.in);
+    UserInterface userInterface;
 
     /**
      * Creates a new PrimeNumberSearch object.
@@ -99,12 +98,12 @@ public class PrimeNumberSearch {
      * @return  the valid range value.
      */
     private ArrayList<Integer> getValidRange() {
-        ArrayList<Integer> numberRange = requestNumbers();
+        ArrayList<Integer> numberRange = userInterface.requestNumbers();
 
         while (validateRange(numberRange).equals(false)) {
             System.out.println(
                 "That range is not valid, the lowest number should be entered first and highest number second");
-            numberRange = requestNumbers();
+            numberRange = userInterface.requestNumbers();
 
         }
 
@@ -139,74 +138,17 @@ public class PrimeNumberSearch {
     }
 
     /**
-     * Requests numbers for the range.
-     *
-     * @return  ArrayList
-     */
-    private ArrayList<Integer> requestNumbers() {
-        final ArrayList<Integer> userNumbers = new ArrayList<Integer>();
-
-        System.out.println("Enter the minimum number: ");
-        userNumbers.add(0, requestUserInteger());
-        System.out.println("Enter the maximum number: ");
-        userNumbers.add(1, requestUserInteger());
-
-        return userNumbers;
-
-    }
-
-    /**
-     * Returns valid Integer as user input from the console.
-     *
-     * @return  user number value.
-     */
-    private Integer requestUserInteger() {
-        String userInput;
-        Integer userInteger = -1;
-
-        while (userInteger <= -1) {
-            userInput = consoleReader.next();
-
-            try {
-                userInteger = Integer.parseInt(userInput);
-
-            } catch (NumberFormatException ex) {
-            }
-
-            if (userInteger <= -1) {
-                System.out.println("That value is not a positive whole number.");
-                System.out.println("Please enter a valid number: ");
-
-            }
-
-        }
-
-        return userInteger;
-
-    }
-
-    /**
      * Runs the PrimeNumber search.
      */
     private void runSearch() {
         ArrayList<Integer> primeNumbers = new ArrayList<Integer>();
         ArrayList<Integer> numberRange = new ArrayList<Integer>();
 
-        userInstructions();
+        userInterface.userInstructions();
         numberRange = getValidRange();
         primeNumbers = findPrimeNumbers(numberRange.get(0), numberRange.get(1));
         printNumbers(primeNumbers, numberRange);
-        consoleReader.close();
-
-    }
-
-    /**
-     * Instructs the user.
-     */
-    private void userInstructions() {
-        System.out.println("Prime Number Search");
-        System.out.println(
-            "This program accepts two whole positive numbers and outputs the prime numbers in that range.");
+        userInterface.getConsoleReader().close();
 
     }
 
