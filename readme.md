@@ -2,7 +2,7 @@
 This application accepts two positive whole integers as input and outputs all of the prime numbers between that range.
 
 ## Packaging
-Get get a valid executable jar, you'll need to have maven installed:
+To get a valid executable jar, you'll need to have maven installed:
 https://maven.apache.org/install.html
 
 Once you have maven installed, run the following command from the project directory:

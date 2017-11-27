@@ -16,7 +16,7 @@ import java.util.Scanner;
  * @version  $Revision$, $Date$
  */
 public class PrimeNumberSearch {
-    final Scanner consoleReader = new Scanner(System.in);
+    private final Scanner consoleReader = new Scanner(System.in);
 
     /**
      * Creates a new PrimeNumberSearch object.
@@ -59,11 +59,46 @@ public class PrimeNumberSearch {
     }
 
     /**
+     * Determines if a number is a prime number.
+     *
+     * @param   number
+     *
+     * @return  number prime value.
+     */
+    public Boolean isNumberPrime(final Integer number) {
+        Boolean isPrime = true;
+
+        if (number != 2) {
+            if (number < 2) {
+                isPrime = false;
+
+            } else if ((number % 2) == 0) {
+                // The number is a multiple of 2 so it's not a prime
+                isPrime = false;
+
+            }
+
+            // Determine if the number is a multiple of any odd number less than the number itself
+            for (int i = 3; (i * i) <= number; i += 2) {
+                if ((number % i) == 0) {
+                    isPrime = false;
+
+                }
+
+            }
+
+        }
+
+        return isPrime;
+
+    }
+
+    /**
      * Returns the valid range value.
      *
      * @return  the valid range value.
      */
-    public ArrayList<Integer> getValidRange() {
+    private ArrayList<Integer> getValidRange() {
         ArrayList<Integer> numberRange = requestNumbers();
 
         while (validateRange(numberRange).equals(false)) {
@@ -78,45 +113,12 @@ public class PrimeNumberSearch {
     }
 
     /**
-     * Determines if a number is a prime number.
-     *
-     * @param   number
-     *
-     * @return  number prime value.
-     */
-    public Boolean isNumberPrime(final Integer number) {
-        if (number == 2) {
-            return true;
-
-        } else if (number < 2) {
-            return false;
-
-        } else if ((number % 2) == 0) {
-            // The number is a multiple of 2 so it's not a prime
-            return false;
-
-        }
-
-        // Determine if the number is a multiple of any odd number less than the number itself
-        for (int i = 3; (i * i) <= number; i += 2) {
-            if ((number % i) == 0) {
-                return false;
-
-            }
-
-        }
-
-        return true;
-
-    }
-
-    /**
      * Prints the prime numbers in the users range.
      *
      * @param  primeNumbers
      * @param  numberRange
      */
-    public void printNumbers(final ArrayList<Integer> primeNumbers, final ArrayList<Integer> numberRange) {
+    private void printNumbers(final ArrayList<Integer> primeNumbers, final ArrayList<Integer> numberRange) {
         if (primeNumbers.size() == 0) {
             System.out.println("There were no prime numbers between " + numberRange.get(0) + " and " +
                 numberRange.get(1));
@@ -141,7 +143,7 @@ public class PrimeNumberSearch {
      *
      * @return  ArrayList
      */
-    public ArrayList<Integer> requestNumbers() {
+    private ArrayList<Integer> requestNumbers() {
         final ArrayList<Integer> userNumbers = new ArrayList<Integer>();
 
         System.out.println("Enter the minimum number: ");
@@ -158,7 +160,7 @@ public class PrimeNumberSearch {
      *
      * @return  user number value.
      */
-    public Integer requestUserInteger() {
+    private Integer requestUserInteger() {
         String userInput;
         Integer userInteger = -1;
 
@@ -186,7 +188,7 @@ public class PrimeNumberSearch {
     /**
      * Runs the PrimeNumber search.
      */
-    public void runSearch() {
+    private void runSearch() {
         ArrayList<Integer> primeNumbers = new ArrayList<Integer>();
         ArrayList<Integer> numberRange = new ArrayList<Integer>();
 
@@ -201,7 +203,7 @@ public class PrimeNumberSearch {
     /**
      * Instructs the user.
      */
-    public void userInstructions() {
+    private void userInstructions() {
         System.out.println("Prime Number Search");
         System.out.println(
             "This program accepts two whole positive numbers and outputs the prime numbers in that range.");
@@ -215,7 +217,7 @@ public class PrimeNumberSearch {
      *
      * @return  Boolean
      */
-    public Boolean validateRange(final ArrayList<Integer> numberRange) {
+    private Boolean validateRange(final ArrayList<Integer> numberRange) {
         return numberRange.get(0) < numberRange.get(1);
 
     }
@@ -225,7 +227,7 @@ public class PrimeNumberSearch {
      *
      * @param  results
      */
-    public void writeResultsFile(final ArrayList<Integer> results) {
+    private void writeResultsFile(final ArrayList<Integer> results) {
         final String file = "PrimeNumbers.txt";
         System.out.println("Writing results to: " + file);
 

@@ -15,7 +15,7 @@ import java.util.Arrays;
  * @version  $Revision$, $Date$
  */
 public class UnitTests {
-    PrimeNumberSearch numberSearch = new PrimeNumberSearch();
+    private PrimeNumberSearch numberSearch = new PrimeNumberSearch();
 
     /**
      * Creates a new UnitTests object.
